@@ -1,0 +1,20 @@
+-- 코드를 입력하세요
+SELECT B.MEMBER_NAME,
+       A.REVIEW_TEXT,
+       TO_CHAR(A.REVIEW_DATE, 'YYYY-MM-DD') AS REVIEW_DATE
+FROM   REST_REVIEW A
+JOIN   MEMBER_PROFILE B 
+       ON A.MEMBER_ID = B.MEMBER_ID
+WHERE  A.MEMBER_ID = (
+           SELECT MEMBER_ID
+           FROM (
+               SELECT MEMBER_ID
+               FROM REST_REVIEW
+               GROUP BY MEMBER_ID
+               ORDER BY COUNT(*) DESC
+           )
+           WHERE ROWNUM = 1
+       )
+ORDER BY A.REVIEW_DATE, A.REVIEW_TEXT;
+
+
